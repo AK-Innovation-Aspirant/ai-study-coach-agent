@@ -1,6 +1,6 @@
 # 📚 AI Study Coach Agent
 
-An agentic AI application that generates personalized study plans, recommends learning resources, and provides interactive quizzes and revision support.
+An agentic AI application that generates personalized study plans, recommends learning resources, provides interactive quizzes, and maintains persistent learning progress across sessions.
 
 ## Features
 
@@ -17,6 +17,10 @@ An agentic AI application that generates personalized study plans, recommends le
   * Flashcards
   * Revision prompts
 * 🔄 Topic-based quizzes on demand
+* 📊 Progress dashboard
+* ✅ Topic and week completion tracking
+* 📈 Quiz history and weak-area detection
+* 💾 Persistent study plans and progress
 * 🌐 Streamlit web interface
 * 🔗 OpenRouter LLM integration
 * ⚡ Batched quiz generation for low API usage
@@ -24,111 +28,50 @@ An agentic AI application that generates personalized study plans, recommends le
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```text
 agentic_ai/
-├── app.py                     # Streamlit UI
-├── main.py                    # CLI entry point
+├── app.py
+├── main.py
 ├── requirements.txt
 ├── README.md
 ├── .env
 │
 ├── agents/
 │   ├── __init__.py
-│   ├── orchestrator_agent.py  # Coordinates all agents
-│   ├── planner_agent.py       # Creates study plans
-│   ├── resource_agent.py      # Adds learning resources
-│   └── quiz_agent.py          # Quiz generation
+│   ├── orchestrator_agent.py
+│   ├── planner_agent.py
+│   ├── resource_agent.py
+│   ├── quiz_agent.py
+│   └── progress_agent.py
 │
 ├── core/
 │   ├── __init__.py
-│   ├── llm_client.py          # OpenRouter API client
-│   └── models.py              # Pydantic models
+│   ├── llm_client.py
+│   └── models.py
 │
 ├── tools/
 │   ├── __init__.py
-│   ├── resource_tool.py       # Web search utilities
-│   ├── youtube_tool.py        # YouTube API integration
-│   └── resource_ranker.py     # Resource deduplication and ranking
+│   ├── resource_tool.py
+│   ├── youtube_tool.py
+│   └── resource_ranker.py
+│
+├── utils/
+│   └── storage.py
+│
+├── data/
+│   ├── study_plan.json
+│   └── progress.json
 │
 └── ui/
     ├── __init__.py
-    └── renderer.py            # Markdown rendering
+    └── renderer.py
 ```
 
 ---
 
-## Installation
-
-### 1. Clone the repository
-
-```bash
-git clone <repository-url>
-cd agentic_ai
-```
-
-### 2. Create a Conda environment
-
-```bash
-conda create -n agentic python=3.12
-```
-
-Activate it:
-
-```bash
-conda activate agentic
-```
-
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## Environment Variables
-
-Create a `.env` file:
-
-```env
-OPENROUTER_API_KEY=your_openrouter_key
-YOUTUBE_API_KEY=your_youtube_api_key
-```
-
----
-
-## Running the Application
-
-### Streamlit UI
-
-```bash
-streamlit run app.py
-```
-
-### Command Line Version
-
-```bash
-python main.py
-```
-
----
-
-## Architecture
-
-```text
-                   Orchestrator Agent
-                            │
-        ┌───────────────────┼──────────────────┐
-        │                   │                  │
-        ▼                   ▼                  ▼
- Planning Agent       Resource Agent       Quiz Agent
-        │                   │                  │
- OpenRouter LLM      Search + YouTube    OpenRouter LLM
-```
-
-### Current Pipeline
+# Architecture
 
 ```text
 Frontend (Streamlit)
@@ -136,29 +79,47 @@ Frontend (Streamlit)
         ▼
 OrchestratorAgent
         │
- ┌──────┼─────────┐
- ▼      ▼         ▼
-PlanningAgent ResourceAgent QuizAgent
-    │         │         │
- OpenRouter  DDGS +     OpenRouter
-    │       YouTube       │
- StudyPlan  Resources   All quizzes
-                        (batched)
+┌───────┼─────────┬──────────┐
+▼       ▼         ▼          ▼
+Planning Resource Quiz    Progress
+ Agent    Agent  Agent      Agent
+    │        │      │          │
+OpenRouter DDGS+  OpenRouter Persistent
+   LLM     YouTube    LLM      Storage
 ```
 
 ---
 
-## API Usage
+# Current Pipeline
+
+```text
+Frontend
+    │
+    ▼
+OrchestratorAgent
+    │
+ ┌──┼────────┬─────────┐
+ ▼  ▼        ▼         ▼
+Planning Resource Quiz Progress
+ Agent    Agent Agent   Agent
+    │       │     │        │
+OpenRouter Search Batched JSON
+   LLM    APIs   Quiz    Storage
+```
+
+---
+
+# API Usage
 
 Initial study plan generation requires only two LLM calls:
 
-1. **PlanningAgent**
+1. PlanningAgent
 
    * Generates the week-by-week roadmap.
 
-2. **QuizAgent**
+2. QuizAgent
 
-   * Generates all quizzes, flashcards, MCQs, and revision questions in one batched request.
+   * Generates all short-answer questions, MCQs, flashcards, and revision questions in one batched request.
 
 Resource retrieval uses external search and does not consume LLM calls.
 
@@ -166,55 +127,77 @@ Topic-based quizzes are generated on demand and require one additional LLM call.
 
 ---
 
-## Streamlit Interface
+# Streamlit Interface
 
-### 📚 Study Plan
+## 📚 Study Plan
 
 * Week-by-week roadmap
-* Topics
-* Expected outcomes
+* Topics and outcomes
 * Ranked learning resources
+* Topic completion tracking
+* Week completion tracking
 
-### 📝 Quiz Center
+## 📝 Quiz Center
 
 * Short-answer questions
 * Multiple-choice questions
 * Answer explanations
 * Interactive flashcards
+* Quiz score recording
 
-### 🔄 Revision Center
+## 🔄 Revision Center
 
 * Revision questions
 * Topic-based quiz generation
-* Separate storage of topic quizzes in session state
+
+## 📊 Progress Dashboard
+
+* Completed topics
+* Completed weeks
+* Quiz history
+* Weak areas
+* Study history
 
 ---
 
-## Dependencies
+# Persistent Memory
 
-* Streamlit
-* Pydantic
-* Requests
-* python-dotenv
-* DuckDuckGo Search (ddgs)
+Progress is stored locally and survives restarts.
+
+Files:
+
+```text
+data/study_plan.json
+data/progress.json
+```
+
+Stored information:
+
+* Completed topics
+* Completed weeks
+* Quiz attempts
+* Weak areas
+* Study history
+
+Generating a new study plan automatically resets progress.
 
 ---
 
-## Current Status
+# Current Status
 
-### Phase 1
+## Phase 1
 
 ✅ Study plan generation
 
-### Phase 2
+## Phase 2
 
 ✅ Resource discovery and ranking
 
-### Phase 3
+## Phase 3
 
 ✅ Multi-agent orchestration
 
-### Phase 4
+## Phase 4
 
 ✅ Interactive quizzes and revision system
 
@@ -224,33 +207,33 @@ Topic-based quizzes are generated on demand and require one additional LLM call.
 * Robust JSON repair
 * Fallback mechanisms
 
-### Phase 5 (Planned)
+## Phase 5
 
-Progress tracking and memory
+✅ Progress tracking and memory
 
-* Quiz scores
-* Completed topics
-* Weak area detection
-* Study history
 * Persistent storage
+* Topic completion tracking
+* Week completion tracking
+* Quiz history
+* Weak-area detection
+* Study history
+* Progress dashboard
+* Session recovery
 
-### Phase 6 (Planned)
+## Phase 6 (Planned)
 
 Adaptive learning
 
-* Reschedule missed tasks
 * Dynamic roadmap updates
 * Automatic revision scheduling
+* Missed-task recovery
 * Personalized study coach
 
 ---
 
-## Future Improvements
+# Future Improvements
 
-* Progress dashboard
-* Persistent storage
-* Weak-topic analytics
-* Adaptive roadmap generation
+* Adaptive learning agent
 * Spaced repetition
 * PDF export
 * Multi-LLM support
@@ -258,6 +241,6 @@ Adaptive learning
 
 ---
 
-## License
+# License
 
 MIT License

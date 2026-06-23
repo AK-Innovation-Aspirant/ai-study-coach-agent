@@ -1,6 +1,6 @@
-from models import StudyRequest
-from orchestrator_agent import OrchestratorAgent
-from renderer import render_study_plan
+from core.models import StudyRequest
+from agents.orchestrator_agent import OrchestratorAgent
+from ui.renderer import render_study_plan
 
 
 def main():
