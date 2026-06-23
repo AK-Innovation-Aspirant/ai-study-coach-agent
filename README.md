@@ -71,6 +71,128 @@ agentic_ai/
 
 ---
 
+# Installation
+
+## 1. Clone the repository
+
+```bash
+git clone https://github.com/AK-Innovation-Aspirant/ai-study-coach-agent
+cd ai-study-coach-agent
+```
+
+## 2. Create a Conda environment
+
+```bash
+conda create -n agentic python=3.11
+```
+
+Activate it:
+
+```bash
+conda activate agentic
+```
+
+## 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# Environment Variables
+
+Create a `.env` file:
+
+```env
+OPENROUTER_API_KEY=your_openrouter_key
+YOUTUBE_API_KEY=your_youtube_api_key
+```
+
+## Obtaining an OpenRouter API Key
+
+1. Visit:
+
+   https://openrouter.ai
+
+2. Sign in or create an account.
+
+3. Navigate to:
+
+   **API Keys**
+
+4. Create a new API key.
+
+5. Copy the key and place it into:
+
+```env
+OPENROUTER_API_KEY=your_openrouter_key
+```
+
+---
+
+## Obtaining a YouTube API Key
+
+1. Visit:
+
+   https://console.cloud.google.com/
+
+2. Create a new Google Cloud project (or select an existing project).
+
+3. Navigate to:
+
+   **APIs & Services → Library**
+
+4. Search for:
+
+   **YouTube Data API v3**
+
+5. Click **Enable**.
+
+6. Navigate to:
+
+   **APIs & Services → Credentials**
+
+7. Click:
+
+   **Create Credentials → API Key**
+
+8. Copy the generated key and place it into:
+
+```env
+YOUTUBE_API_KEY=your_youtube_api_key
+```
+
+---
+
+## Example `.env`
+
+```env
+OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxx
+
+YOUTUBE_API_KEY=AIzaSyxxxxxxxxxxxxxxxx
+```
+
+The `.env` file should be placed in the root of the project directory and should not be committed to Git.
+
+---
+
+# Running the Application
+
+## Streamlit UI
+
+```bash
+streamlit run app.py
+```
+
+## Command Line Version
+
+```bash
+python main.py
+```
+
+---
+
 # Architecture
 
 ```text
