@@ -1,6 +1,6 @@
 import json
 
-from models import (
+from core.models import (
     StudyPlan,
     WeekPlan,
     Quiz,

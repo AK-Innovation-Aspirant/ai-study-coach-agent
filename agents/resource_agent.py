@@ -1,6 +1,5 @@
-from models import StudyPlan
-from resource_tool import ResourceTool
-
+from core.models import StudyPlan
+from tools.resource_tool import ResourceTool
 
 class ResourceAgent:
     def __init__(self):

@@ -2,7 +2,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from models import Resource
+from core.models import Resource
 
 load_dotenv()
 

@@ -1,5 +1,4 @@
-from models import StudyPlan
-
+from core.models import StudyPlan
 
 def render_study_plan(plan: StudyPlan) -> str:
     lines = []

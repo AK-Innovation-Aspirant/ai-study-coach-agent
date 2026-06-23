@@ -1,9 +1,9 @@
 import time
 from ddgs import DDGS
 
-from models import Resource, WeekPlan, StudyPlan
-from youtube_tool import YoutubeTool
-from resource_ranker import ResourceRanker
+from core.models import Resource, WeekPlan, StudyPlan
+from tools.youtube_tool import YoutubeTool
+from tools.resource_ranker import ResourceRanker
 
 
 class ResourceTool:

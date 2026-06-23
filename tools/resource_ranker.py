@@ -1,6 +1,6 @@
 from urllib.parse import urlparse, parse_qs
 
-from models import Resource
+from core.models import Resource
 
 
 class ResourceRanker:

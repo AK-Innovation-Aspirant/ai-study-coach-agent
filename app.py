@@ -1,9 +1,9 @@
 import streamlit as st
 
-from models import StudyRequest
-from orchestrator_agent import OrchestratorAgent
-from llm_client import OpenRouterClient
-from quiz_agent import QuizAgent
+from core.models import StudyRequest
+from core.llm_client import OpenRouterClient
+from agents.orchestrator_agent import OrchestratorAgent
+from agents.quiz_agent import QuizAgent
 
 
 st.set_page_config(

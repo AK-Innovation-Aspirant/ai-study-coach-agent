@@ -1,8 +1,8 @@
-from models import StudyRequest, StudyPlan
-from llm_client import OpenRouterClient
-from planner_agent import PlanningAgent
-from resource_agent import ResourceAgent
-from quiz_agent import QuizAgent
+from core.models import StudyRequest, StudyPlan
+from core.llm_client import OpenRouterClient
+from agents.planner_agent import PlanningAgent
+from agents.resource_agent import ResourceAgent
+from agents.quiz_agent import QuizAgent
 
 
 class OrchestratorAgent:

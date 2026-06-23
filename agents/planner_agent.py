@@ -1,6 +1,6 @@
 import json
 
-from models import StudyRequest, StudyPlan
+from core.models import StudyRequest, StudyPlan
 
 
 class PlanningAgent:
