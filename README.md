@@ -90,34 +90,15 @@ OpenRouter DDGS+  OpenRouter Persistent
 
 ---
 
-# Current Pipeline
-
-```text
-Frontend
-    │
-    ▼
-OrchestratorAgent
-    │
- ┌──┼────────┬─────────┐
- ▼  ▼        ▼         ▼
-Planning Resource Quiz Progress
- Agent    Agent Agent   Agent
-    │       │     │        │
-OpenRouter Search Batched JSON
-   LLM    APIs   Quiz    Storage
-```
-
----
-
 # API Usage
 
 Initial study plan generation requires only two LLM calls:
 
-1. PlanningAgent
+1. **PlanningAgent**
 
    * Generates the week-by-week roadmap.
 
-2. QuizAgent
+2. **QuizAgent**
 
    * Generates all short-answer questions, MCQs, flashcards, and revision questions in one batched request.
 
@@ -154,9 +135,10 @@ Topic-based quizzes are generated on demand and require one additional LLM call.
 
 * Completed topics
 * Completed weeks
-* Quiz history
-* Weak areas
-* Study history
+* Quiz history and scores
+* Weak areas detected from quiz performance
+* Study history with timestamps
+* Persistent progress across restarts
 
 ---
 
@@ -180,6 +162,32 @@ Stored information:
 * Study history
 
 Generating a new study plan automatically resets progress.
+
+---
+
+# Weak Area Detection
+
+Quiz performance is used to identify weak topics automatically.
+
+Each quiz attempt records:
+
+* Quiz type
+* Topic
+* Score percentage
+* Number of correct answers
+* Timestamp
+
+Weak topics are determined using an average score threshold.
+
+Current threshold:
+
+```text
+70%
+```
+
+Topics whose average quiz score falls below 70% are automatically added to the weak-area list and displayed in the Progress Dashboard.
+
+This information serves as the foundation for future adaptive learning features planned in Phase 6.
 
 ---
 
@@ -215,7 +223,7 @@ Generating a new study plan automatically resets progress.
 * Topic completion tracking
 * Week completion tracking
 * Quiz history
-* Weak-area detection
+* Weak-area detection using a 70% score threshold
 * Study history
 * Progress dashboard
 * Session recovery
@@ -234,6 +242,8 @@ Adaptive learning
 # Future Improvements
 
 * Adaptive learning agent
+* Automatic revision scheduling
+* Missed-task recovery
 * Spaced repetition
 * PDF export
 * Multi-LLM support
